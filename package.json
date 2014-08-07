@@ -1,0 +1,25 @@
+{
+  "name": "angular-responsive-elements",
+  "version": "0.0.0",
+  "description": "Dynamically add and remove classes on an HTML element based on the width of it's parent element",
+  "main": "angular-responsive-elements.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikemclin/angular-responsive-elements.git"
+  },
+  "keywords": [
+    "angular",
+    "responsive"
+  ],
+  "author": "Mike McLin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikemclin/angular-responsive-elements/issues"
+  }
+}
