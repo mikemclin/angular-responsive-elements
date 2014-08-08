@@ -27,9 +27,9 @@
 
 'use strict';
 
-angular.module('mm.responsive.elements', []);
+angular.module('mm.responsiveElements', []);
 
-angular.module('mm.responsive.elements').provider('RespondConfig', function () {
+angular.module('mm.responsiveElements').provider('RespondConfig', function () {
   var config = {
     start: 100,
     end: 900,
@@ -48,7 +48,7 @@ angular.module('mm.responsive.elements').provider('RespondConfig', function () {
   };
 });
 
-angular.module('mm.responsive.elements').directive('respond', [
+angular.module('mm.responsiveElements').directive('respond', [
   'RespondConfig', '$window', function (RespondConfig, $window) {
 
     return {
