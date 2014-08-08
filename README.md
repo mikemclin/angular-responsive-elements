@@ -1,5 +1,7 @@
 # Angular Responsive Elements
 
+[![Build Status](https://secure.travis-ci.org/mikemclin/angular-responsive-elements.png?branch=master)](https://travis-ci.org/mikemclin/angular-responsive-elements)
+
 ## Install
 
 Install with `bower`:
