@@ -8,7 +8,7 @@ module.exports = function (config) {
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'angular-responsive-elements.js',
-      'test/*_test.js'
+      'test/unit/*_test.js'
     ],
 
     frameworks: ['jasmine'],
