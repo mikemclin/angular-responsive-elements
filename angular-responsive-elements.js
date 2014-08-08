@@ -62,7 +62,9 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         scope.init = function () {
           scope.renderBreakpointClasses();
-          angular.element($window).on('resize', scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate));
+          angular.element($window).on('resize',
+            scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate)
+          );
         };
 
         scope.renderBreakpointClasses = function () {
@@ -96,9 +98,15 @@ angular.module('mm.responsiveElements').directive('respond', [
             i = interval > start ? interval : ~~(start / interval) * interval,
             classes = [];
           while (i <= end) {
-            if (i < width) classes.push('gt' + i);
-            if (i > width) classes.push('lt' + i);
-            if (i == width) classes.push('lt' + i);
+            if (i < width) {
+              classes.push('gt' + i);
+            }
+            if (i > width) {
+              classes.push('lt' + i);
+            }
+            if (parseInt(i) === parseInt(width)) {
+              classes.push('lt' + i);
+            }
 
             i += interval;
           }
@@ -115,10 +123,16 @@ angular.module('mm.responsiveElements').directive('respond', [
             len = custom.length,
             classes = [];
 
-          for (; i<len; i++) {
-            if (custom[i] < width) classes.push('gt' + custom[i]);
-            if (custom[i] > width) classes.push('lt' + custom[i]);
-            if (custom[i] == width) classes.push('lt' + custom[i]);
+          for (; i < len; i++) {
+            if (custom[i] < width) {
+              classes.push('gt' + custom[i]);
+            }
+            if (custom[i] > width) {
+              classes.push('lt' + custom[i]);
+            }
+            if (parseInt(custom[i]) === parseInt(width)) {
+              classes.push('lt' + custom[i]);
+            }
           }
 
           return classes;
@@ -131,10 +145,14 @@ angular.module('mm.responsiveElements').directive('respond', [
         };
 
         scope.parseBreakpointClasses = function () {
-          var breakpointsString = element.attr('class') || '', classes = breakpointsString.split(/\s+/), breakpointClasses = [];
+          var breakpointsString = element.attr('class') || '',
+            classes = breakpointsString.split(/\s+/),
+            breakpointClasses = [];
 
           for (var i = 0, len = classes.length; i < len; i++) {
-            if (classes[i].match(/^gt\d+|lt\d+$/)) breakpointClasses.push(classes[i]);
+            if (classes[i].match(/^gt\d+|lt\d+$/)) {
+              breakpointClasses.push(classes[i]);
+            }
           }
 
           return breakpointClasses;
@@ -161,12 +179,16 @@ angular.module('mm.responsiveElements').directive('respond', [
             var context = this, args = arguments;
             var later = function () {
               timeout = null;
-              if (!immediate) result = func.apply(context, args);
+              if (!immediate) {
+                result = func.apply(context, args);
+              }
             };
             var callNow = immediate && !timeout;
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
-            if (callNow) result = func.apply(context, args);
+            if (callNow) {
+              result = func.apply(context, args);
+            }
             return result;
           };
         };

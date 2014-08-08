@@ -1,8 +1,5 @@
-# SASS Cache files
 *.sassc
 .sass-cache
-
-# OS generated files
 .DS_Store
 .DS_Store?
 ._*
@@ -12,3 +9,5 @@ Icon?
 ehthumbs.db
 Thumbs.db
 .idea
+node_modules
+test-results.xml
