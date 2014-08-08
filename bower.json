@@ -1,6 +1,6 @@
 {
   "name": "angular-responsive-elements",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "authors": [
     "Mike McLin <mclinmike@gmail.com>"
   ],
@@ -18,8 +18,5 @@
     "bower_components",
     "test",
     "tests"
-  ],
-  "devDependencies": {
-    "jquery": "1.11.1"
-  }
+  ]
 }
