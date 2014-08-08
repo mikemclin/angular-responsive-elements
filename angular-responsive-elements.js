@@ -34,10 +34,13 @@ angular.module('mm.responsive.elements').provider('RespondConfig', function () {
     start: 100,
     end: 900,
     interval: 50,
-    maxRefreshRate: 5
+    maxRefreshRate: 5,
+    custom: [],
+    doInterval: true,
+    doCustom: false
   };
   return {
-    settings: function (userConfig) {
+    config: function (userConfig) {
       angular.extend(config, userConfig);
     }, $get: function () {
       return config;
@@ -50,32 +53,46 @@ angular.module('mm.responsive.elements').directive('respond', [
 
     return {
       restrict: 'A',
-      scope: {},
+      scope: {
+        respondConfig: '='
+      },
       link: function (scope, element, attrs) {
 
-        var config = scope.config = {
-          start: ('respondStart' in attrs) ? parseInt(attrs.respondStart) : RespondConfig.start,
-          end: ('respondEnd' in attrs) ? parseInt(attrs.respondEnd) : RespondConfig.end,
-          interval: ('respondInterval' in attrs) ? parseInt(attrs.respondInterval) : RespondConfig.interval,
-          maxRefreshRate: ('respondMaxRefreshRate' in attrs) ? parseInt(attrs.respondMaxRefreshRate) : RespondConfig.maxRefreshRate
-        };
+        scope.config = angular.extend(RespondConfig, scope.respondConfig);
 
         scope.init = function () {
-          scope.generateBreakpointsOnElement();
-          angular.element($window).on('resize', scope.debounce(scope.generateBreakpointsOnElement, config.maxRefreshRate));
+          scope.renderBreakpointClasses();
+          angular.element($window).on('resize', scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate));
         };
 
-        scope.generateBreakpointsOnElement = function () {
+        scope.renderBreakpointClasses = function () {
           var breakpoints = scope.generateBreakpoints();
-          scope.cleanUpBreakpoints();
+          scope.removeBreakpointClasses();
           element.addClass(breakpoints.join(' '));
         };
 
         scope.generateBreakpoints = function () {
+
+          var intervalClasses = [], customClasses = [];
+
+          if (scope.config.doInterval) {
+            intervalClasses = scope.generateIntervalBreakpoints();
+          }
+
+          if (scope.config.doCustom) {
+            customClasses = scope.generateCustomBreakpoints();
+          }
+
+          return intervalClasses.concat(customClasses);
+
+        };
+
+        scope.generateIntervalBreakpoints = function () {
+
           var width = element[0].clientWidth,
-            start = config.start,
-            end = config.end,
-            interval = config.interval,
+            start = scope.config.start,
+            end = scope.config.end,
+            interval = scope.config.interval,
             i = interval > start ? interval : ~~(start / interval) * interval,
             classes = [];
           while (i <= end) {
@@ -87,9 +104,28 @@ angular.module('mm.responsive.elements').directive('respond', [
           }
 
           return classes;
+
         };
 
-        scope.cleanUpBreakpoints = function () {
+        scope.generateCustomBreakpoints = function () {
+
+          var width = element[0].clientWidth,
+            custom = scope.config.custom,
+            i = 0,
+            len = custom.length,
+            classes = [];
+
+          for (; i<len; i++) {
+            if (custom[i] < width) classes.push('gt' + custom[i]);
+            if (custom[i] > width) classes.push('lt' + custom[i]);
+            if (custom[i] == width) classes.push('lt' + custom[i]);
+          }
+
+          return classes;
+
+        };
+
+        scope.removeBreakpointClasses = function () {
           var classesToCleanup = scope.parseBreakpointClasses();
           element.removeClass(classesToCleanup.join(' '));
         };
