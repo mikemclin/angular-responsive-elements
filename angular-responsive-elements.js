@@ -49,7 +49,9 @@ angular.module('mm.responsive.elements').directive('respond', [
   'RespondConfig', '$window', function (RespondConfig, $window) {
 
     return {
-      restrict: 'A', link: function (scope, element, attrs) {
+      restrict: 'A',
+      scope: {},
+      link: function (scope, element, attrs) {
 
         var config = scope.config = {
           start: ('respondStart' in attrs) ? parseInt(attrs.respondStart) : RespondConfig.start,
