@@ -71,6 +71,12 @@ module.exports = function(grunt) {
       }
     },
 
+    coveralls: {
+      options: {
+        coverage_dir: '<%= paths.test %>/unit/coverage'
+      }
+    },
+
     // Create OS notifications alerting progress
     notify: {
       default: {
@@ -92,7 +98,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', [
     'jshint',
-    'karma:travis'
+    'karma:travis',
+    'coveralls'
   ]);
 
 };

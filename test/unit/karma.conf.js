@@ -19,12 +19,22 @@ module.exports = function (config) {
       'karma-jasmine',
       'karma-junit-reporter',
       'karma-chrome-launcher',
-      'karma-phantomjs-launcher'
+      'karma-phantomjs-launcher',
+      'karma-coverage'
     ],
 
     reporters: [
-      'progress', 'junit'
+      'progress', 'junit', 'coverage'
     ],
+
+    preprocessors: {
+      'angular-responsive-elements.js': 'coverage'
+    },
+
+    coverageReporter: {
+      type: "lcov",
+      dir: "coverage/"
+    },
 
     junitReporter: {
       outputFile: 'test-results.xml'
