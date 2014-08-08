@@ -2,13 +2,13 @@ module.exports = function (config) {
 
   config.set({
 
-    basePath: '..',
+    basePath: '../../',
 
     files: [
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'angular-responsive-elements.js',
-      'test/*_unit.js'
+      'test/*_test.js'
     ],
 
     frameworks: ['jasmine'],
