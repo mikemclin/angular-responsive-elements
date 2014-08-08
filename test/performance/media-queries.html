@@ -6,10 +6,11 @@
     <title>Media Queries Performance</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body ng-app="myApp" ng-controller="AppCtrl">
 <style>
-    .box {
+    .item {
         height: 30px;
         margin: 10px;
         border: 5px solid red;
@@ -17,141 +18,78 @@
     }
 
     @media (max-width: 320px) {
-        .box { border-color: blue; }
+        .item { border-color: blue; }
     }
     @media (min-width: 320px) {
-        .box { background-color: green; }
+        .item { background-color: green; }
     }
     @media (max-width: 480px) {
-        .box { border-color: yellow; }
+        .item { border-color: yellow; }
     }
     @media (min-width: 480px) {
-        .box { background-color: black; }
+        .item { background-color: black; }
     }
     @media (max-width: 768px) {
-        .box { border-color: salmon; }
+        .item { border-color: salmon; }
     }
     @media (min-width: 768px) {
-        .box { background-color: saddlebrown; }
+        .item { background-color: saddlebrown; }
     }
     @media (max-width: 980px) {
-        .box { border-color: purple; }
+        .item { border-color: purple; }
     }
     @media (min-width: 980px) {
-        .box { background-color: hotpink; }
+        .item { background-color: hotpink; }
     }
     @media (max-width: 1200px) {
-        .box { border-color: orange; }
+        .item { border-color: orange; }
     }
     @media (min-width: 1200px) {
-        .box { background-color: silver; }
+        .item { background-color: silver; }
     }
 </style>
 
-<h1>Media Queries Performance</h1>
+<div class="container">
 
-<p>Resize the window to see how performance compares to using <a href="angular-responsive-elements.html">Angular Responsive Elements</a>.</p>
+    <h1>Media Queries Performance</h1>
 
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
-<div class="box"></div>
+    <p class="lead">Resize the window to compare Media Queries performance with Responsive Elements</p>
+
+    <div class="btn-group">
+        <a href="angular-responsive-elements.html" class="btn btn-default">Responsive Elements</a>
+        <button type="button" class="btn btn-primary active">Media Queries</button>
+    </div>
+
+    <strong>{{ numOfElements }} items displayed</strong>
+
+    <hr>
+
+</div>
+
+<div class="item" ng-repeat="item in items"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+
+<script>
+
+    angular.module('myApp', [])
+
+            .controller('AppCtrl', function ($scope) {
+
+                $scope.items = [];
+                $scope.numOfElements = 100;
+
+                $scope.renderItems = function () {
+                    for(var i=0; i<$scope.numOfElements; i++) {
+                        $scope.items.push({});
+                    }
+                };
+
+                $scope.renderItems();
+
+            });
+
+</script>
 
 </body>
 </html>

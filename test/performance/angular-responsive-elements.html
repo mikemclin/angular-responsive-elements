@@ -6,135 +6,109 @@
     <title>Media Queries Performance</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body ng-app="mm.responsiveElements">
+<body ng-app="myApp" ng-controller="AppCtrl">
 <style>
-    .box {
+    .item {
         height: 30px;
         margin: 10px;
         border: 5px solid red;
         background-color: white;
     }
 
-    .box.lt320 { border-color: blue; }
-    .box.gt320 { background-color: green; }
-    .box.lt480 { border-color: yellow; }
-    .box.gt480 { background-color: black; }
-    .box.lt768 { border-color: salmon; }
-    .box.gt768 { background-color: saddlebrown; }
-    .box.lt980 { border-color: purple; }
-    .box.gt980 { background-color: hotpink; }
-    .box.lt1200 { border-color: orange; }
-    .box.gt1200 { background-color: silver; }
+    .item.lt320 {
+        border-color: blue;
+    }
+
+    .item.gt320 {
+        background-color: green;
+    }
+
+    .item.lt480 {
+        border-color: yellow;
+    }
+
+    .item.gt480 {
+        background-color: black;
+    }
+
+    .item.lt768 {
+        border-color: salmon;
+    }
+
+    .item.gt768 {
+        background-color: saddlebrown;
+    }
+
+    .item.lt980 {
+        border-color: purple;
+    }
+
+    .item.gt980 {
+        background-color: hotpink;
+    }
+
+    .item.lt1200 {
+        border-color: orange;
+    }
+
+    .item.gt1200 {
+        background-color: silver;
+    }
+
 </style>
 
-<h1>Angular Responsive Elements Performance</h1>
+<div class="container">
 
-<p>Resize the window to see how performance compares to using <a href="media-queries.html">Media Queries</a>.</p>
+    <h1>Angular Responsive Elements Performance</h1>
 
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
-<div class="box" respond respond-config="{doInterval:false, doCustom:true, custom:[320,480,768,960,1200]}"></div>
+    <p class="lead">Resize the window to compare Responsive Elements performance with Media Queries</p>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary active">Responsive Elements</button>
+        <a href="media-queries.html" class="btn btn-default">Media Queries</a>
+    </div>
+
+    <strong>{{ numOfElements }} items displayed</strong>
+
+    <hr>
+
+</div>
+
+<div class="item" ng-repeat="item in items" respond></div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
 <script src="../../angular-responsive-elements.js"></script>
+
+<script>
+
+    angular.module('myApp', ['mm.responsiveElements'])
+
+            .config(function (RespondConfigProvider) {
+                RespondConfigProvider.config({
+                    doInterval: false,
+                    doCustom: true,
+                    custom: [320, 480, 768, 960, 1200]
+                });
+            })
+
+            .controller('AppCtrl', function ($scope) {
+
+                $scope.items = [];
+                $scope.numOfElements = 100;
+
+                $scope.renderItems = function () {
+                    for(var i=0; i<$scope.numOfElements; i++) {
+                        $scope.items.push({});
+                    }
+                };
+
+                $scope.renderItems();
+
+            });
+
+</script>
 
 </body>
 </html>
