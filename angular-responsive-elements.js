@@ -58,7 +58,7 @@ angular.module('mm.responsiveElements').directive('respond', [
       },
       link: function (scope, element, attrs) {
 
-        scope.config = angular.extend(RespondConfig, scope.respondConfig);
+        scope.config = angular.extend(angular.copy(RespondConfig), scope.respondConfig);
 
         scope.init = function () {
           scope.renderBreakpointClasses();

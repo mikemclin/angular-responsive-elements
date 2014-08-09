@@ -33,6 +33,7 @@ describe('ConfigService', function () {
         expect(scope.config.start).toMatch(100);
         element = angular.element('<div respond respond-config="{start:300}"></div>');
         $compile(element)($rootScope);
+        scope = element.isolateScope();
         expect(scope.config.start).toMatch(300);
       });
 
@@ -84,20 +85,20 @@ describe('ConfigService', function () {
 
       it('should call generateIntervalBreakpoints() when configured to do so', function () {
         var generateIntervalBreakpoints = spyOn(scope, 'generateIntervalBreakpoints').and.returnValue([]);
-        RespondConfig.doInterval = false;
+        scope.config.doInterval = false;
         scope.generateBreakpoints();
         expect(generateIntervalBreakpoints).not.toHaveBeenCalled();
-        RespondConfig.doInterval = true;
+        scope.config.doInterval = true;
         scope.generateBreakpoints();
         expect(generateIntervalBreakpoints).toHaveBeenCalled();
       });
 
       it('should call generateCustomBreakpoints() when configured to do so', function () {
         var generateCustomBreakpoints = spyOn(scope, 'generateCustomBreakpoints').and.returnValue([]);
-        RespondConfig.doCustom = false;
+        scope.config.doCustom = false;
         scope.generateBreakpoints();
         expect(generateCustomBreakpoints).not.toHaveBeenCalled();
-        RespondConfig.doCustom = true;
+        scope.config.doCustom = true;
         scope.generateBreakpoints();
         expect(generateCustomBreakpoints).toHaveBeenCalled();
       });
@@ -105,8 +106,8 @@ describe('ConfigService', function () {
       it('should return concat value of generateIntervalBreakpoints() and generateCustomBreakpoints()', function () {
         var generateIntervalBreakpoints = spyOn(scope, 'generateIntervalBreakpoints').and.returnValue(['foo']);
         var generateCustomBreakpoints = spyOn(scope, 'generateCustomBreakpoints').and.returnValue(['bar']);
-        RespondConfig.doInterval = true;
-        RespondConfig.doCustom = true;
+        scope.config.doInterval = true;
+        scope.config.doCustom = true;
         var response = scope.generateBreakpoints();
         expect(response).toEqual(['foo', 'bar']);
       });
