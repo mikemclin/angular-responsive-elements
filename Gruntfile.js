@@ -33,7 +33,8 @@ module.exports = function(grunt) {
       src: {
         files: [
           'Gruntfile.js',
-          '<%= paths.src %>'
+          '<%= paths.src %>',
+          '<%= paths.test %>/unit/*.js'
         ],
         tasks: ['default']
       }
