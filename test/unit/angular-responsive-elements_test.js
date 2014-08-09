@@ -56,6 +56,30 @@ describe('ConfigService', function () {
 
     });
 
+    describe('renderBreakpointClasses()', function () {
+
+      it('should call generateBreakpoints()', function () {
+        var generateBreakpoints = spyOn(scope, 'generateBreakpoints').and.returnValue([]);
+        scope.renderBreakpointClasses();
+        expect(generateBreakpoints).toHaveBeenCalled();
+      });
+
+      it('should call removeBreakpointClasses()', function () {
+        var removeBreakpointClasses = spyOn(scope, 'removeBreakpointClasses');
+        scope.renderBreakpointClasses();
+        expect(removeBreakpointClasses).toHaveBeenCalled();
+      });
+
+      it('should call add classes to element', function () {
+        var generateBreakpoints = spyOn(scope, 'generateBreakpoints').and.returnValue(['foo', 'bar']);
+        var removeBreakpointClasses = spyOn(scope, 'removeBreakpointClasses');
+        var elementClasses = element.attr('class');
+        scope.renderBreakpointClasses();
+        expect(element.attr('class')).toBe(elementClasses + ' foo bar');
+      });
+
+    });
+
   });
 
 });
