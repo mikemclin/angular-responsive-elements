@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 
     coveralls: {
       options: {
-        'coverage_dir': '<%= paths.test %>/unit/coverage'
+        'coverage_dir': './coverage'
       }
     },
 
