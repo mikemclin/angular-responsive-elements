@@ -62,9 +62,9 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         scope.init = function () {
           scope.renderBreakpointClasses();
-          angular.element($window).on('resize',
-            scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate)
-          );
+          angular.element($window).on('resize', function () {
+            scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate);
+          });
         };
 
         scope.renderBreakpointClasses = function () {
