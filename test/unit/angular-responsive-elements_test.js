@@ -46,6 +46,14 @@ describe('ConfigService', function () {
         expect(renderBreakpointClasses).toHaveBeenCalled();
       });
 
+      it('should add listener that calls debounce() on window resize event', function () {
+        var debounce = spyOn(scope, 'debounce');
+        scope.init();
+        expect(debounce).not.toHaveBeenCalled();
+        angular.element($window).triggerHandler('resize');
+        expect(debounce).toHaveBeenCalled();
+      });
+
     });
 
   });
