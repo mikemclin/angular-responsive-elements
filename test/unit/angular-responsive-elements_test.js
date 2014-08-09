@@ -80,6 +80,39 @@ describe('ConfigService', function () {
 
     });
 
+    describe('generateBreakpoints()', function () {
+
+      it('should call generateIntervalBreakpoints() when configured to do so', function () {
+        var generateIntervalBreakpoints = spyOn(scope, 'generateIntervalBreakpoints').and.returnValue([]);
+        RespondConfig.doInterval = false;
+        scope.generateBreakpoints();
+        expect(generateIntervalBreakpoints).not.toHaveBeenCalled();
+        RespondConfig.doInterval = true;
+        scope.generateBreakpoints();
+        expect(generateIntervalBreakpoints).toHaveBeenCalled();
+      });
+
+      it('should call generateCustomBreakpoints() when configured to do so', function () {
+        var generateCustomBreakpoints = spyOn(scope, 'generateCustomBreakpoints').and.returnValue([]);
+        RespondConfig.doCustom = false;
+        scope.generateBreakpoints();
+        expect(generateCustomBreakpoints).not.toHaveBeenCalled();
+        RespondConfig.doCustom = true;
+        scope.generateBreakpoints();
+        expect(generateCustomBreakpoints).toHaveBeenCalled();
+      });
+
+      it('should return concat value of generateIntervalBreakpoints() and generateCustomBreakpoints()', function () {
+        var generateIntervalBreakpoints = spyOn(scope, 'generateIntervalBreakpoints').and.returnValue(['foo']);
+        var generateCustomBreakpoints = spyOn(scope, 'generateCustomBreakpoints').and.returnValue(['bar']);
+        RespondConfig.doInterval = true;
+        RespondConfig.doCustom = true;
+        var response = scope.generateBreakpoints();
+        expect(response).toEqual(['foo', 'bar']);
+      });
+
+    });
+
   });
 
 });
