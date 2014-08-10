@@ -131,7 +131,6 @@ describe('ConfigService', function () {
         scope.config.start = 100;
         scope.config.end = 300;
         scope.config.interval = 100;
-        scope.config.equalsPrefix = 'foo';
       });
 
       it('should return an array', function () {
@@ -166,7 +165,6 @@ describe('ConfigService', function () {
         scope.config.doInterval = false;
         scope.config.doCustom = false;
         scope.config.custom = [320, 768, 1280];
-        scope.config.equalsPrefix = 'foo';
       });
 
       it('should return an array', function () {
@@ -190,6 +188,31 @@ describe('ConfigService', function () {
       it('should return an array of the values returned from getClassName()', function () {
         var getClassName = spyOn(scope, 'getClassName').and.returnValue('foo');
         expect(scope.generateCustomBreakpoints()).toEqual(['foo', 'foo', 'foo']);
+      });
+
+    });
+
+    describe('getClassName()', function () {
+
+      beforeEach(function () {
+        scope.config.equalsPrefix = 'foo';
+        spyOn(scope, 'getElementWidth').and.returnValue(300);
+      });
+
+      it('should return a string', function () {
+        expect(typeof scope.getClassName(200)).toBe('string');
+      });
+
+      it('should prepend `lt` if element width is less than passed value', function () {
+        expect(scope.getClassName(400)).toBe('lt400');
+      });
+
+      it('should prepend `gt` if element width is less than passed value', function () {
+        expect(scope.getClassName(200)).toBe('gt200');
+      });
+
+      it('should prepend `config.equalsPrefix` if element width is equal to passed value', function () {
+        expect(scope.getClassName(300)).toBe('foo300');
       });
 
     });
