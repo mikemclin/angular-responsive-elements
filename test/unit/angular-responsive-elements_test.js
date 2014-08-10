@@ -89,6 +89,10 @@ describe('ConfigService', function () {
 
     describe('generateBreakpoints()', function () {
 
+      it('should return an array', function () {
+        expect(scope.generateBreakpoints() instanceof Array).toBeTruthy();
+      });
+
       it('should call generateIntervalBreakpoints() when configured to do so', function () {
         var generateIntervalBreakpoints = spyOn(scope, 'generateIntervalBreakpoints').and.returnValue([]);
         scope.config.doInterval = false;
