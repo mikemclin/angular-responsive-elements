@@ -29,8 +29,6 @@ describe('ConfigService', function () {
       });
 
       it('should allow custom config per element', function () {
-        RespondConfig.start = 100;
-        expect(scope.config.start).toMatch(100);
         element = angular.element('<div respond respond-config="{start:300}"></div>');
         $compile(element)($rootScope);
         scope = element.isolateScope();
@@ -53,6 +51,14 @@ describe('ConfigService', function () {
         expect(debounce).not.toHaveBeenCalled();
         angular.element($window).triggerHandler('resize');
         expect(debounce).toHaveBeenCalled();
+      });
+
+    });
+
+    describe('getElementWidth()', function () {
+
+      it('should return a number', function () {
+        expect(typeof scope.getElementWidth()).toBe('number');
       });
 
     });

@@ -67,6 +67,14 @@ angular.module('mm.responsiveElements').directive('respond', [
           });
         };
 
+
+
+        scope.getElementWidth = function() {
+
+          return element[0].clientWidth;
+
+        };
+
         scope.renderBreakpointClasses = function () {
           var breakpoints = scope.generateBreakpoints();
           scope.removeBreakpointClasses();
@@ -91,7 +99,7 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         scope.generateIntervalBreakpoints = function () {
 
-          var width = element[0].clientWidth,
+          var width = scope.getElementWidth(),
             start = scope.config.start,
             end = scope.config.end,
             interval = scope.config.interval,
@@ -117,7 +125,7 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         scope.generateCustomBreakpoints = function () {
 
-          var width = element[0].clientWidth,
+          var width = scope.getElementWidth(),
             custom = scope.config.custom,
             i = 0,
             len = custom.length,
