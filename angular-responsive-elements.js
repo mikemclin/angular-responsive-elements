@@ -62,24 +62,27 @@ angular.module('mm.responsiveElements').directive('respond', [
         scope.config = angular.extend(angular.copy(RespondConfig), scope.respondConfig);
 
         scope.init = function () {
+
           scope.renderBreakpointClasses();
           angular.element($window).on('resize', function () {
             scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate);
           });
+
         };
 
-
-
-        scope.getElementWidth = function() {
+        scope.getElementWidth = function () {
 
           return element[0].clientWidth;
 
         };
 
         scope.renderBreakpointClasses = function () {
+
           var breakpoints = scope.generateBreakpoints();
+
           scope.removeBreakpointClasses();
           element.addClass(breakpoints.join(' '));
+
         };
 
         scope.generateBreakpoints = function () {
@@ -89,7 +92,6 @@ angular.module('mm.responsiveElements').directive('respond', [
           if (scope.config.doInterval) {
             intervalClasses = scope.generateIntervalBreakpoints();
           }
-
           if (scope.config.doCustom) {
             customClasses = scope.generateCustomBreakpoints();
           }
@@ -100,25 +102,15 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         scope.generateIntervalBreakpoints = function () {
 
-          var width = scope.getElementWidth(),
-            start = scope.config.start,
+          var start = scope.config.start,
             end = scope.config.end,
             interval = scope.config.interval,
-            equalsPrefix = scope.config.equalsPrefix,
-            i = interval > start ? interval : ~~(start / interval) * interval,
+            value = interval > start ? interval : ~~(start / interval) * interval,
             classes = [];
-          while (i <= end) {
-            if (i < width) {
-              classes.push('gt' + i);
-            }
-            if (i > width) {
-              classes.push('lt' + i);
-            }
-            if (parseInt(i) === parseInt(width)) {
-              classes.push(equalsPrefix + i);
-            }
 
-            i += interval;
+          while (value <= end) {
+            classes.push(scope.getClassName(value));
+            value += interval;
           }
 
           return classes;
@@ -127,25 +119,33 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         scope.generateCustomBreakpoints = function () {
 
-          var width = scope.getElementWidth(),
-            custom = scope.config.custom,
+          var custom = scope.config.custom,
             i = 0,
             len = custom.length,
             classes = [];
 
           for (; i < len; i++) {
-            if (custom[i] < width) {
-              classes.push('gt' + custom[i]);
-            }
-            if (custom[i] > width) {
-              classes.push('lt' + custom[i]);
-            }
-            if (parseInt(custom[i]) === parseInt(width)) {
-              classes.push('lt' + custom[i]);
-            }
+            classes.push(scope.getClassName(custom[i]));
           }
 
           return classes;
+
+        };
+
+        scope.getClassName = function (value) {
+
+          var elementWidth = scope.getElementWidth(),
+            equalsPrefix = scope.config.equalsPrefix;
+
+          if (value < elementWidth) {
+            return 'gt' + value;
+          }
+          if (value > elementWidth) {
+            return 'lt' + value;
+          }
+          if (parseInt(value) === parseInt(elementWidth)) {
+            return equalsPrefix + value;
+          }
 
         };
 
