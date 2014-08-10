@@ -217,6 +217,29 @@ describe('ConfigService', function () {
 
     });
 
+    describe('removeBreakpointClasses()', function () {
+
+      var parseBreakpointClasses;
+
+      beforeEach(function () {
+        parseBreakpointClasses = spyOn(scope, 'parseBreakpointClasses').and.returnValue(['foo', 'bar']);
+      });
+
+      it('should call parseBreakpointClasses()', function () {
+        expect(parseBreakpointClasses).not.toHaveBeenCalled();
+        scope.removeBreakpointClasses();
+        expect(parseBreakpointClasses).toHaveBeenCalled();
+      });
+
+      it('should remove classes on element returned from parseBreakpointClasses()', function () {
+        element.addClass('foo bar');
+        expect(element.hasClass('foo bar')).toBeTruthy();
+        scope.removeBreakpointClasses();
+        expect(element.hasClass('foo bar')).toBeFalsy();
+      });
+
+    });
+
   });
 
 });
