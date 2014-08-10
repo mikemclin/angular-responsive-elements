@@ -319,6 +319,11 @@ describe('respond directive', function () {
       expect(debounceFunc).toHaveBeenCalled();
     });
 
+    it('should invoke callback immediately if 3rd param is truthy', function () {
+      scope.debounce(debounceFunc, 100, true);
+      expect(debounceFunc).toHaveBeenCalled();
+    });
+
   });
 
 });
