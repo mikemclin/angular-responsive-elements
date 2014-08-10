@@ -157,10 +157,11 @@ angular.module('mm.responsiveElements').directive('respond', [
         scope.parseBreakpointClasses = function () {
           var breakpointsString = element.attr('class') || '',
             classes = breakpointsString.split(/\s+/),
-            breakpointClasses = [];
+            breakpointClasses = [],
+            re = new RegExp(scope.config.equalsPrefix + '\\d+');
 
           for (var i = 0, len = classes.length; i < len; i++) {
-            if (classes[i].match(/^gt\d+|lt\d+$/)) {
+            if (classes[i].match(/^gt\d+|lt\d+$/) || classes[i].match(re)) {
               breakpointClasses.push(classes[i]);
             }
           }

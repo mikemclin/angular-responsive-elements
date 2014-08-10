@@ -240,6 +240,28 @@ describe('ConfigService', function () {
 
     });
 
+    describe('parseBreakpointClasses()', function () {
+
+      beforeEach(function () {
+        scope.config.equalsPrefix = 'foo';
+      });
+
+      it('should return an array', function () {
+        expect(scope.parseBreakpointClasses() instanceof Array).toBeTruthy();
+      });
+
+      it('should return all `lt`, `gt` and `config.equalsPrefix` prefixed classes on element', function () {
+        element.attr('class', 'lt100 lt200 gt100 gt200 foo100 foo200 bar100 bar200');
+        expect(scope.parseBreakpointClasses()).toEqual(['lt100', 'lt200', 'gt100', 'gt200', 'foo100', 'foo200']);
+      });
+
+      it('should only return classes if prefix is followed by a number', function () {
+        element.attr('class', 'lt ltfoo lt100 gt gtbar gt100 foo foobaz foo100');
+        expect(scope.parseBreakpointClasses()).toEqual(['lt100', 'gt100', 'foo100']);
+      });
+
+    });
+
   });
 
 });
