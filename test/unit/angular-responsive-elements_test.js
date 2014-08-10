@@ -124,6 +124,52 @@ describe('ConfigService', function () {
 
     });
 
+    describe('generateIntervalBreakpoints()', function () {
+
+      it('should return an array', function () {
+        expect(scope.generateIntervalBreakpoints() instanceof Array).toBeTruthy();
+      });
+
+      it('should return the right number of class names', function () {
+        spyOn(scope, 'getElementWidth').and.returnValue(250);
+        scope.config.doInterval = true;
+        scope.config.start = 100;
+        scope.config.end = 300;
+        scope.config.interval = 100;
+        var numOfItems = Math.floor((scope.config.end - scope.config.start) / scope.config.interval) + 1;
+        expect(scope.generateIntervalBreakpoints().length).toEqual(numOfItems);
+      });
+
+      it('should prepend `lt` to class names when element width is lower than class name value', function () {
+        spyOn(scope, 'getElementWidth').and.returnValue(50);
+        scope.config.doInterval = true;
+        scope.config.start = 100;
+        scope.config.end = 300;
+        scope.config.interval = 100;
+        expect(scope.generateIntervalBreakpoints()).toEqual(['lt100', 'lt200', 'lt300']);
+      });
+
+      it('should prepend `gt` to class names when element width is higher than class name value', function () {
+        spyOn(scope, 'getElementWidth').and.returnValue(500);
+        scope.config.doInterval = true;
+        scope.config.start = 100;
+        scope.config.end = 300;
+        scope.config.interval = 100;
+        expect(scope.generateIntervalBreakpoints()).toEqual(['gt100', 'gt200', 'gt300']);
+      });
+
+      it('should prepend `config.equalsPrefix` to class name when element width equals class name value', function () {
+        spyOn(scope, 'getElementWidth').and.returnValue(200);
+        scope.config.doInterval = true;
+        scope.config.start = 100;
+        scope.config.end = 300;
+        scope.config.interval = 100;
+        scope.config.equalsPrefix = 'foo';
+        expect(scope.generateIntervalBreakpoints()).toEqual(['gt100', 'foo200', 'lt300']);
+      });
+
+    });
+
   });
 
 });
