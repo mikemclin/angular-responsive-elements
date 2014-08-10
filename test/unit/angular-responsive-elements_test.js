@@ -4,16 +4,18 @@ describe('ConfigService', function () {
   var $rootScope;
   var $compile;
   var $window;
+  var $timeout;
   var RespondConfig;
   var element;
   var scope;
 
   beforeEach(module('mm.responsiveElements'));
 
-  beforeEach(inject(function (_$rootScope_, _$compile_, _$window_, _RespondConfig_) {
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$window_, _$timeout_, _RespondConfig_) {
     $rootScope = _$rootScope_;
     $compile = _$compile_;
     $window = _$window_;
+    $timeout = _$timeout_;
     RespondConfig = _RespondConfig_;
     element = angular.element('<div respond></div>');
     $compile(element)($rootScope);
@@ -258,6 +260,33 @@ describe('ConfigService', function () {
       it('should only return classes if prefix is followed by a number', function () {
         element.attr('class', 'lt ltfoo lt100 gt gtbar gt100 foo foobaz foo100');
         expect(scope.parseBreakpointClasses()).toEqual(['lt100', 'gt100', 'foo100']);
+      });
+
+    });
+
+    describe('debounce()', function () {
+
+      var debounceFunc;
+
+      beforeEach(function () {
+        debounceFunc = jasmine.createSpy('debounceFunc');
+      });
+
+      it('should invoke callback after specified delay', function () {
+        scope.debounce(debounceFunc, 100);
+        expect(debounceFunc).not.toHaveBeenCalled();
+        $timeout.flush(100);
+        expect(debounceFunc).toHaveBeenCalled();
+      });
+
+      it('should wait again if another call arrives during wait', function () {
+        scope.debounce(debounceFunc, 100);
+        $timeout.flush(99);
+        scope.debounce(debounceFunc, 100);
+        $timeout.flush(99);
+        expect(debounceFunc).not.toHaveBeenCalled();
+        $timeout.flush(1);
+        expect(debounceFunc).toHaveBeenCalled();
       });
 
     });

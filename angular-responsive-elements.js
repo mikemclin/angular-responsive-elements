@@ -50,7 +50,7 @@ angular.module('mm.responsiveElements').provider('RespondConfig', function () {
 });
 
 angular.module('mm.responsiveElements').directive('respond', [
-  'RespondConfig', '$window', function (RespondConfig, $window) {
+  '$window', '$timeout', 'RespondConfig', function ($window, $timeout, RespondConfig) {
 
     return {
       restrict: 'A',
@@ -58,6 +58,8 @@ angular.module('mm.responsiveElements').directive('respond', [
         respondConfig: '='
       },
       link: function (scope, element, attrs) {
+
+        var timeout;
 
         scope.config = angular.extend(angular.copy(RespondConfig), scope.respondConfig);
 
@@ -170,38 +172,30 @@ angular.module('mm.responsiveElements').directive('respond', [
         };
 
         /**
-         * Debounce is part of Underscore.js 1.5.2 http://underscorejs.org
-         * (c) 2009-2013 Jeremy Ashkenas. Distributed under the MIT license.
+         * Debounce Utility
          *
-         * Returns a function, that, as long as it continues to be invoked,
-         * will not be triggered. The function will be called after it stops
-         * being called for N milliseconds. If `immediate` is passed,
-         * trigger the function on the leading edge, instead of the trailing.
+         * http://stackoverflow.com/questions/13320015/how-to-write-a-debounce-service-in-angularjs
          *
          * @param func
          * @param wait
          * @param immediate
-         * @returns {Function}
          */
         scope.debounce = function (func, wait, immediate) {
-          var result;
-          var timeout = null;
-          return function () {
-            var context = this, args = arguments;
-            var later = function () {
-              timeout = null;
-              if (!immediate) {
-                result = func.apply(context, args);
-              }
-            };
-            var callNow = immediate && !timeout;
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-            if (callNow) {
-              result = func.apply(context, args);
+          var context = this, args = arguments;
+          var later = function () {
+            timeout = null;
+            if (!immediate) {
+              func.apply(context, args);
             }
-            return result;
           };
+          var callNow = immediate && !timeout;
+          if (timeout) {
+            $timeout.cancel(timeout);
+          }
+          timeout = $timeout(later, wait);
+          if (callNow) {
+            func.apply(context, args);
+          }
         };
 
         scope.init();
