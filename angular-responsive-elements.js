@@ -34,6 +34,7 @@ angular.module('mm.responsiveElements').provider('RespondConfig', function () {
     start: 100,
     end: 900,
     interval: 50,
+    equalsPrefix: 'gt',
     maxRefreshRate: 5,
     custom: [],
     doInterval: true,
@@ -103,6 +104,7 @@ angular.module('mm.responsiveElements').directive('respond', [
             start = scope.config.start,
             end = scope.config.end,
             interval = scope.config.interval,
+            equalsPrefix = scope.config.equalsPrefix,
             i = interval > start ? interval : ~~(start / interval) * interval,
             classes = [];
           while (i <= end) {
@@ -113,7 +115,7 @@ angular.module('mm.responsiveElements').directive('respond', [
               classes.push('lt' + i);
             }
             if (parseInt(i) === parseInt(width)) {
-              classes.push('lt' + i);
+              classes.push(equalsPrefix + i);
             }
 
             i += interval;
