@@ -126,46 +126,70 @@ describe('ConfigService', function () {
 
     describe('generateIntervalBreakpoints()', function () {
 
-      it('should return an array', function () {
-        expect(scope.generateIntervalBreakpoints() instanceof Array).toBeTruthy();
-      });
-
-      it('should return the right number of class names', function () {
-        spyOn(scope, 'getElementWidth').and.returnValue(250);
-        scope.config.doInterval = true;
-        scope.config.start = 100;
-        scope.config.end = 300;
-        scope.config.interval = 100;
-        var numOfItems = Math.floor((scope.config.end - scope.config.start) / scope.config.interval) + 1;
-        expect(scope.generateIntervalBreakpoints().length).toEqual(numOfItems);
-      });
-
-      it('should prepend `lt` to class names when element width is lower than class name value', function () {
-        spyOn(scope, 'getElementWidth').and.returnValue(50);
-        scope.config.doInterval = true;
-        scope.config.start = 100;
-        scope.config.end = 300;
-        scope.config.interval = 100;
-        expect(scope.generateIntervalBreakpoints()).toEqual(['lt100', 'lt200', 'lt300']);
-      });
-
-      it('should prepend `gt` to class names when element width is higher than class name value', function () {
-        spyOn(scope, 'getElementWidth').and.returnValue(500);
-        scope.config.doInterval = true;
-        scope.config.start = 100;
-        scope.config.end = 300;
-        scope.config.interval = 100;
-        expect(scope.generateIntervalBreakpoints()).toEqual(['gt100', 'gt200', 'gt300']);
-      });
-
-      it('should prepend `config.equalsPrefix` to class name when element width equals class name value', function () {
-        spyOn(scope, 'getElementWidth').and.returnValue(200);
+      beforeEach(function () {
         scope.config.doInterval = true;
         scope.config.start = 100;
         scope.config.end = 300;
         scope.config.interval = 100;
         scope.config.equalsPrefix = 'foo';
-        expect(scope.generateIntervalBreakpoints()).toEqual(['gt100', 'foo200', 'lt300']);
+      });
+
+      it('should return an array', function () {
+        expect(scope.generateIntervalBreakpoints() instanceof Array).toBeTruthy();
+      });
+
+      it('should call getClassName() the correct number of times', function () {
+        var getClassName = spyOn(scope, 'getClassName');
+        var numOfItems = Math.floor((scope.config.end - scope.config.start) / scope.config.interval) + 1;
+        scope.generateIntervalBreakpoints();
+        expect(getClassName.calls.count()).toEqual(numOfItems);
+      });
+
+      it('should pass the correct value to getClassName()', function () {
+        var getClassName = spyOn(scope, 'getClassName');
+        scope.generateIntervalBreakpoints();
+        expect(getClassName.calls.first().args[0]).toEqual(100);
+        expect(getClassName.calls.all()[1].args[0]).toEqual(200);
+        expect(getClassName.calls.mostRecent().args[0]).toEqual(300);
+      });
+
+      it('should return an array of the values returned from getClassName()', function () {
+        var getClassName = spyOn(scope, 'getClassName').and.returnValue('foo');
+        expect(scope.generateIntervalBreakpoints()).toEqual(['foo', 'foo', 'foo']);
+      });
+
+    });
+
+    describe('generateCustomBreakpoints()', function () {
+
+      beforeEach(function () {
+        scope.config.doInterval = false;
+        scope.config.doCustom = false;
+        scope.config.custom = [320, 768, 1280];
+        scope.config.equalsPrefix = 'foo';
+      });
+
+      it('should return an array', function () {
+        expect(scope.generateCustomBreakpoints() instanceof Array).toBeTruthy();
+      });
+
+      it('should call getClassName() the correct number of times', function () {
+        var getClassName = spyOn(scope, 'getClassName');
+        scope.generateCustomBreakpoints();
+        expect(getClassName.calls.count()).toEqual(scope.config.custom.length);
+      });
+
+      it('should pass the correct value to getClassName()', function () {
+        var getClassName = spyOn(scope, 'getClassName');
+        scope.generateCustomBreakpoints();
+        expect(getClassName.calls.first().args[0]).toEqual(320);
+        expect(getClassName.calls.all()[1].args[0]).toEqual(768);
+        expect(getClassName.calls.mostRecent().args[0]).toEqual(1280);
+      });
+
+      it('should return an array of the values returned from getClassName()', function () {
+        var getClassName = spyOn(scope, 'getClassName').and.returnValue('foo');
+        expect(scope.generateCustomBreakpoints()).toEqual(['foo', 'foo', 'foo']);
       });
 
     });
