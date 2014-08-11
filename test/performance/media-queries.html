@@ -60,7 +60,7 @@
         <button type="button" class="btn btn-primary active">Media Queries</button>
     </div>
 
-    <strong>{{ numOfElements }} items displayed</strong>
+    <input type="text" class="form-control" style="width:70px;display:inline-block;" ng-model="numOfElements" ng-change="renderItems()" /> <strong>items displayed</strong>
 
     <hr>
 
@@ -80,6 +80,7 @@
                 $scope.numOfElements = 100;
 
                 $scope.renderItems = function () {
+                    $scope.items = [];
                     for(var i=0; i<$scope.numOfElements; i++) {
                         $scope.items.push({});
                     }
