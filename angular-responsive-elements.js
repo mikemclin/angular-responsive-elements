@@ -66,8 +66,17 @@ angular.module('mm.responsiveElements').directive('respond', [
         scope.init = function () {
 
           scope.renderBreakpointClasses();
-          angular.element($window).on('resize', function () {
-            scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate);
+
+          scope.addListeners();
+
+        };
+
+        scope.addListeners = function () {
+
+          angular.element($window).on('resize', scope.debounceRenderBreakpointClasses);
+
+          scope.$on('$destroy', function () {
+            angular.element($window).off('resize', scope.debounceRenderBreakpointClasses);
           });
 
         };
@@ -84,6 +93,12 @@ angular.module('mm.responsiveElements').directive('respond', [
 
           scope.removeBreakpointClasses();
           element.addClass(breakpoints.join(' '));
+
+        };
+
+        scope.debounceRenderBreakpointClasses = function () {
+
+          scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate);
 
         };
 

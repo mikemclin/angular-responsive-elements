@@ -77,12 +77,30 @@ describe('respond directive', function () {
       expect(renderBreakpointClasses).toHaveBeenCalled();
     });
 
-    it('should add listener that calls debounce() on window resize event', function () {
-      var debounce = spyOn(scope, 'debounce');
+    it('should call addListeners()', function () {
+      var addListeners = spyOn(scope, 'addListeners');
       scope.init();
-      expect(debounce).not.toHaveBeenCalled();
+      expect(addListeners).toHaveBeenCalled();
+    });
+
+  });
+
+  describe('addListeners()', function () {
+
+    it('should add listener that calls debounceRenderBreakpointClasses() on window resize event', function () {
+      var debounceRenderBreakpointClasses = spyOn(scope, 'debounceRenderBreakpointClasses');
+      scope.addListeners();
+      expect(debounceRenderBreakpointClasses).not.toHaveBeenCalled();
       angular.element($window).triggerHandler('resize');
-      expect(debounce).toHaveBeenCalled();
+      expect(debounceRenderBreakpointClasses).toHaveBeenCalled();
+    });
+
+    it('should remove window resize listener when element scope is destroyed', function () {
+      var debounceRenderBreakpointClasses = spyOn(scope, 'debounceRenderBreakpointClasses');
+      scope.addListeners();
+      scope.$broadcast('$destroy');
+      angular.element($window).triggerHandler('resize');
+      expect(debounceRenderBreakpointClasses).not.toHaveBeenCalled();
     });
 
   });
@@ -115,6 +133,22 @@ describe('respond directive', function () {
       var elementClasses = element.attr('class');
       scope.renderBreakpointClasses();
       expect(element.attr('class')).toBe(elementClasses + ' foo bar');
+    });
+
+  });
+
+  describe('debounceRenderBreakpointClasses()', function () {
+
+    it('should call debounce()', function () {
+      var debounce = spyOn(scope, 'debounce');
+      scope.debounceRenderBreakpointClasses();
+      expect(debounce).toHaveBeenCalled();
+    });
+
+    it('should pass the correct parameters to debounce ', function () {
+      var debounce = spyOn(scope, 'debounce');
+      scope.debounceRenderBreakpointClasses();
+      expect(debounce.calls.mostRecent().args).toEqual([scope.renderBreakpointClasses, scope.config.maxRefreshRate]);
     });
 
   });
