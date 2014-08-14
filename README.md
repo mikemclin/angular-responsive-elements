@@ -2,6 +2,8 @@
 
 [![Build Status](https://img.shields.io/travis/mikemclin/angular-responsive-elements/master.svg?style=flat-square)](https://travis-ci.org/mikemclin/angular-responsive-elements)
 [![Coverage Status](https://img.shields.io/coveralls/mikemclin/angular-responsive-elements/master.svg?style=flat-square)](https://coveralls.io/r/mikemclin/angular-responsive-elements?branch=master)
+[![Latest Tag](http://img.shields.io/github/tag/mikemclin/angular-responsive-elements.svg?style=flat-square)](https://github.com/mikemclin/angular-responsive-elements/tags)
+
 
 ## Install
 
