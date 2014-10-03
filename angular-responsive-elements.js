@@ -34,11 +34,12 @@ angular.module('mm.responsiveElements').provider('RespondConfig', function () {
     start: 100,
     end: 900,
     interval: 50,
+    lessThanPrefix: 'lt',
+    graterThanPrefix: 'gt',
     equalsPrefix: 'gt',
     maxRefreshRate: 5,
-    custom: [],
-    doInterval: true,
-    doCustom: false
+    breaks: [],
+    legacy: false
   };
   return {
     config: function (userConfig) {
@@ -61,7 +62,25 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         var timeout;
 
-        scope.config = angular.extend(angular.copy(RespondConfig), scope.respondConfig);
+        var setUpConfig = function () {
+          // Merge the `respond-config` attribute onto the app config
+          var config = angular.extend(angular.copy(RespondConfig), scope.respondConfig);
+          var configPropertyName;
+
+          // Loop through all attributes on the element
+          for (var attribute in attrs) {
+            if (attrs.hasOwnProperty(attribute)) {
+              // If it is a respond attribute, but not `respond-config` since that's already been taken care of
+              if (attribute.substring(0, 7) === 'respond' && attribute !== 'respondConfig') {
+                configPropertyName = attribute.substr(7).charAt(0).toLowerCase() + attribute.slice(1);
+                config[configPropertyName] = (attrs.attribute === 'false') ? false : attrs.attribute;
+              }
+            }
+          }
+          return config;
+        };
+
+        scope.config = setUpConfig();
 
         scope.init = function () {
 
@@ -120,10 +139,10 @@ angular.module('mm.responsiveElements').directive('respond', [
         scope.generateIntervalBreakpoints = function () {
 
           var start = scope.config.start,
-            end = scope.config.end,
-            interval = scope.config.interval,
-            value = interval > start ? interval : ~~(start / interval) * interval,
-            classes = [];
+              end = scope.config.end,
+              interval = scope.config.interval,
+              value = interval > start ? interval : ~~(start / interval) * interval,
+              classes = [];
 
           while (value <= end) {
             classes.push(scope.getClassName(value));
@@ -137,9 +156,9 @@ angular.module('mm.responsiveElements').directive('respond', [
         scope.generateCustomBreakpoints = function () {
 
           var custom = scope.config.custom,
-            i = 0,
-            len = custom.length,
-            classes = [];
+              i = 0,
+              len = custom.length,
+              classes = [];
 
           for (; i < len; i++) {
             classes.push(scope.getClassName(custom[i]));
@@ -152,7 +171,7 @@ angular.module('mm.responsiveElements').directive('respond', [
         scope.getClassName = function (value) {
 
           var elementWidth = scope.getElementWidth(),
-            equalsPrefix = scope.config.equalsPrefix;
+              equalsPrefix = scope.config.equalsPrefix;
 
           if (value < elementWidth) {
             return 'gt' + value;
@@ -173,9 +192,9 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         scope.parseBreakpointClasses = function () {
           var breakpointsString = element.attr('class') || '',
-            classes = breakpointsString.split(/\s+/),
-            breakpointClasses = [],
-            re = new RegExp(scope.config.equalsPrefix + '\\d+');
+              classes = breakpointsString.split(/\s+/),
+              breakpointClasses = [],
+              re = new RegExp(scope.config.equalsPrefix + '\\d+');
 
           for (var i = 0, len = classes.length; i < len; i++) {
             if (classes[i].match(/^gt\d+|lt\d+$/) || classes[i].match(re)) {
