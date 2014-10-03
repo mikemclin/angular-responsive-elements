@@ -108,12 +108,11 @@ angular.module('mm.responsiveElements').directive('respond', [
         };
 
         /**
-         * Get the width of the element
-         *
-         * @returns {number}
+         * Debounces `renderBreakpointClasses` by adding a small delay
+         * between calls to prevent overloading
          */
-        scope.getElementWidth = function () {
-          return element[0].clientWidth;
+        scope.debounceRenderBreakpointClasses = function () {
+          scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate, true);
         };
 
         /**
@@ -125,32 +124,6 @@ angular.module('mm.responsiveElements').directive('respond', [
           scope.removeBreakpointClasses();
           element.addClass(classes.join(' '));
           scope.setCurrentClasses(classes);
-        };
-
-        /**
-         * Sets the classes that we've applied to the element
-         *
-         * @param $classes
-         */
-        scope.setCurrentClasses = function ($classes) {
-          currentClasses = $classes;
-        };
-
-        /**
-         * Gets the classes that we've applied to the element
-         *
-         * @returns {Array}
-         */
-        scope.getCurrentClasses = function () {
-          return currentClasses;
-        };
-
-        /**
-         * Debounces `renderBreakpointClasses` by adding a small delay
-         * between calls to prevent overloading
-         */
-        scope.debounceRenderBreakpointClasses = function () {
-          scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate, true);
         };
 
         /**
@@ -223,6 +196,36 @@ angular.module('mm.responsiveElements').directive('respond', [
           }
         };
 
+        /**
+         * Get the width of the element
+         *
+         * @returns {number}
+         */
+        scope.getElementWidth = function () {
+          return element[0].clientWidth;
+        };
+
+        /**
+         * Sets the classes that we've applied to the element
+         *
+         * @param $classes
+         */
+        scope.setCurrentClasses = function ($classes) {
+          currentClasses = $classes;
+        };
+
+        /**
+         * Gets the classes that we've applied to the element
+         *
+         * @returns {Array}
+         */
+        scope.getCurrentClasses = function () {
+          return currentClasses;
+        };
+
+        /**
+         * Removes classes that we previously added to the element
+         */
         scope.removeBreakpointClasses = function () {
           element.removeClass(scope.getCurrentClasses().join(' '));
         };
