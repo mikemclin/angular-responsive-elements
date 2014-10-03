@@ -59,7 +59,6 @@ angular.module('mm.responsiveElements').directive('respond', [
         respondConfig: '='
       },
       link: function (scope, element, attrs) {
-
         var timeout;
 
         var setUpConfig = function () {
@@ -83,46 +82,34 @@ angular.module('mm.responsiveElements').directive('respond', [
         scope.config = setUpConfig();
 
         scope.init = function () {
-
           scope.renderBreakpointClasses();
-
           scope.addListeners();
-
         };
 
         scope.addListeners = function () {
-
           angular.element($window).on('resize', scope.debounceRenderBreakpointClasses);
 
           scope.$on('$destroy', function () {
             angular.element($window).off('resize', scope.debounceRenderBreakpointClasses);
           });
-
         };
 
         scope.getElementWidth = function () {
-
           return element[0].clientWidth;
-
         };
 
         scope.renderBreakpointClasses = function () {
-
           var breakpoints = scope.generateBreakpoints();
 
           scope.removeBreakpointClasses();
           element.addClass(breakpoints.join(' '));
-
         };
 
         scope.debounceRenderBreakpointClasses = function () {
-
           scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate);
-
         };
 
         scope.generateBreakpoints = function () {
-
           var intervalClasses = [], customClasses = [];
 
           if (scope.config.doInterval) {
@@ -133,11 +120,9 @@ angular.module('mm.responsiveElements').directive('respond', [
           }
 
           return intervalClasses.concat(customClasses);
-
         };
 
         scope.generateIntervalBreakpoints = function () {
-
           var start = scope.config.start,
               end = scope.config.end,
               interval = scope.config.interval,
@@ -150,11 +135,9 @@ angular.module('mm.responsiveElements').directive('respond', [
           }
 
           return classes;
-
         };
 
         scope.generateCustomBreakpoints = function () {
-
           var custom = scope.config.custom,
               i = 0,
               len = custom.length,
@@ -165,11 +148,9 @@ angular.module('mm.responsiveElements').directive('respond', [
           }
 
           return classes;
-
         };
 
         scope.getClassName = function (value) {
-
           var elementWidth = scope.getElementWidth(),
               equalsPrefix = scope.config.equalsPrefix;
 
@@ -182,7 +163,6 @@ angular.module('mm.responsiveElements').directive('respond', [
           if (parseInt(value) === parseInt(elementWidth)) {
             return equalsPrefix + value;
           }
-
         };
 
         scope.removeBreakpointClasses = function () {
@@ -233,7 +213,6 @@ angular.module('mm.responsiveElements').directive('respond', [
         };
 
         scope.init();
-
       }
     };
   }
