@@ -79,7 +79,17 @@ angular.module('mm.responsiveElements').directive('respond', [
               if (attribute.substring(0, 7) === 'respond' && attribute !== 'respondConfig') {
                 configPropertyName = attribute.substr(7);
                 configPropertyName = configPropertyName.charAt(0).toLowerCase() + configPropertyName.slice(1);
-                config[configPropertyName] = (attrs.attribute === 'false') ? false : attrs[attribute];
+                // If we are configuring the breaks setting, we will need to parse the string into an array
+                if (configPropertyName === 'breaks') {
+                  var breaksArray = attrs[attribute].split(',');
+                  var breaks = [];
+                  for (var i = 0, len = breaksArray.length; i < len; i++) {
+                    breaks.push(breaksArray[i].trim());
+                  }
+                  config.breaks = breaks;
+                } else {
+                  config[configPropertyName] = (attrs.attribute === 'false') ? false : attrs[attribute];
+                }
               }
             }
           }
