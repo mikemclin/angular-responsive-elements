@@ -1,7 +1,7 @@
 # Angular Responsive Elements
 
-[![Build Status](https://secure.travis-ci.org/mikemclin/angular-responsive-elements.png?branch=master)](https://travis-ci.org/mikemclin/angular-responsive-elements)
-[![Coverage Status](https://coveralls.io/repos/mikemclin/angular-responsive-elements/badge.png?branch=master)](https://coveralls.io/r/mikemclin/angular-responsive-elements?branch=master)
+[![Build Status](https://img.shields.io/travis/mikemclin/angular-responsive-elements/master.svg?style=flat-square)](https://travis-ci.org/mikemclin/angular-responsive-elements)
+[![Coverage Status](https://img.shields.io/coveralls/mikemclin/angular-responsive-elements/master.svg?style=flat-square)](https://coveralls.io/r/mikemclin/angular-responsive-elements?branch=master)
 
 ## Install
 
@@ -37,10 +37,6 @@ The MIT License
 
 Angular Responsive Elements
 Copyright (c) 2014 Mike McLin
-
-Based on:
-Responsive Elements
-Copyright (c) 2013 Kumail Hunaid
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
