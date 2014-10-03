@@ -34,8 +34,8 @@ angular.module('mm.responsiveElements').provider('RespondConfig', function () {
     start: 100,
     end: 900,
     interval: 50,
-    lessThanPrefix: 'lt',
-    graterThanPrefix: 'gt',
+    ltPrefix: 'lt',
+    gtPrefix: 'gt',
     equalsPrefix: 'gt',
     maxRefreshRate: 5,
     breaks: [],
@@ -143,13 +143,15 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         scope.getClassName = function (value) {
           var elementWidth = scope.getElementWidth(),
+              ltPrefix = scope.config.ltPrefix,
+              gtPrefix = scope.config.gtPrefix,
               equalsPrefix = scope.config.equalsPrefix;
 
-          if (value < elementWidth) {
-            return 'gt' + value;
+          if (parseInt(elementWidth) > parseInt(value)) {
+            return gtPrefix + value;
           }
-          if (value > elementWidth) {
-            return 'lt' + value;
+          if (parseInt(elementWidth) < parseInt(value)) {
+            return ltPrefix + value;
           }
           if (parseInt(value) === parseInt(elementWidth)) {
             return equalsPrefix + value;
