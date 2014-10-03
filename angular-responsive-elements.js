@@ -110,16 +110,7 @@ angular.module('mm.responsiveElements').directive('respond', [
         };
 
         scope.generateBreakpoints = function () {
-          var intervalClasses = [], customClasses = [];
-
-          if (scope.config.doInterval) {
-            intervalClasses = scope.generateIntervalBreakpoints();
-          }
-          if (scope.config.doCustom) {
-            customClasses = scope.generateCustomBreakpoints();
-          }
-
-          return intervalClasses.concat(customClasses);
+          return (scope.config.legacy) ? scope.generateIntervalBreakpoints() : scope.generateCustomBreakpoints();
         };
 
         scope.generateIntervalBreakpoints = function () {
