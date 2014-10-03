@@ -61,6 +61,11 @@ angular.module('mm.responsiveElements').directive('respond', [
       link: function (scope, element, attrs) {
         var timeout;
 
+        /**
+         * Creates the config for this instance
+         *
+         * @returns {Object}
+         */
         var setUpConfig = function () {
           // Merge the `respond-config` attribute onto the app config
           var config = angular.extend(angular.copy(RespondConfig), scope.respondConfig);
@@ -83,11 +88,17 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         scope.config = setUpConfig();
 
+        /**
+         * Initialize the directive
+         */
         scope.init = function () {
           scope.renderBreakpointClasses();
           scope.addListeners();
         };
 
+        /**
+         * Add event listeners
+         */
         scope.addListeners = function () {
           angular.element($window).on('resize', scope.debounceRenderBreakpointClasses);
 
@@ -96,26 +107,67 @@ angular.module('mm.responsiveElements').directive('respond', [
           });
         };
 
+        /**
+         * Get the width of the element
+         *
+         * @returns {number}
+         */
         scope.getElementWidth = function () {
           return element[0].clientWidth;
         };
 
+        /**
+         * Handles the removing and and adding of classes to the element
+         */
         scope.renderBreakpointClasses = function () {
           var classes = scope.generateClasses();
 
           scope.removeBreakpointClasses();
           element.addClass(classes.join(' '));
-          currentClasses = classes;
+          scope.setCurrentClasses(classes);
         };
 
+        /**
+         * Sets the classes that we've applied to the element
+         *
+         * @param $classes
+         */
+        scope.setCurrentClasses = function ($classes) {
+          currentClasses = $classes;
+        };
+
+        /**
+         * Gets the classes that we've applied to the element
+         *
+         * @param $classes
+         * @returns {Array}
+         */
+        scope.getCurrentClasses = function ($classes) {
+          return currentClasses;
+        };
+
+        /**
+         * Debounces `renderBreakpointClasses` by adding a small delay
+         * between calls to prevent overloading
+         */
         scope.debounceRenderBreakpointClasses = function () {
-          scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate);
+          scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate, true);
         };
 
+        /**
+         * Returns an array of class names based on config and element width
+         *
+         * @returns {Array}
+         */
         scope.generateClasses = function () {
           return (scope.config.legacy) ? scope.generateIntervalClasses() : scope.generateCustomClasses();
         };
 
+        /**
+         * Returns class names using legacy breakpoint settings
+         *
+         * @returns {Array}
+         */
         scope.generateIntervalClasses = function () {
           var start = scope.config.start,
               end = scope.config.end,
@@ -131,6 +183,11 @@ angular.module('mm.responsiveElements').directive('respond', [
           return classes;
         };
 
+        /**
+         * Returns class names based on custom breakpoint settings
+         *
+         * @returns {Array}
+         */
         scope.generateCustomClasses = function () {
           var custom = scope.config.custom,
               i = 0,
@@ -144,6 +201,12 @@ angular.module('mm.responsiveElements').directive('respond', [
           return classes;
         };
 
+        /**
+         * Generates the class name based on config and element width
+         *
+         * @param value
+         * @returns {*}
+         */
         scope.getClassName = function (value) {
           var elementWidth = scope.getElementWidth(),
               ltPrefix = scope.config.ltPrefix,
@@ -162,13 +225,13 @@ angular.module('mm.responsiveElements').directive('respond', [
         };
 
         scope.removeBreakpointClasses = function () {
-          element.removeClass(currentClasses.join(' '));
+          element.removeClass(scope.getCurrentClasses().join(' '));
         };
 
         /**
          * Debounce Utility
          *
-         * http://stackoverflow.com/questions/13320015/how-to-write-a-debounce-service-in-angularjs
+         * http://stackoverflow.com/a/22056002
          *
          * @param func
          * @param wait
@@ -192,6 +255,7 @@ angular.module('mm.responsiveElements').directive('respond', [
           }
         };
 
+        // Init this instance!
         scope.init();
       }
     };
