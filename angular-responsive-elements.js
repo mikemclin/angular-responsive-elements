@@ -138,7 +138,7 @@ angular.module('mm.responsiveElements').directive('respond', [
 
         /**
          * Gets the classes that we've applied to the element
-         * 
+         *
          * @returns {Array}
          */
         scope.getCurrentClasses = function () {
