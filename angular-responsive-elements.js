@@ -79,6 +79,8 @@ angular.module('mm.responsiveElements').directive('respond', [
           return config;
         };
 
+        var currentClasses = [];
+
         scope.config = setUpConfig();
 
         scope.init = function () {
@@ -99,21 +101,22 @@ angular.module('mm.responsiveElements').directive('respond', [
         };
 
         scope.renderBreakpointClasses = function () {
-          var breakpoints = scope.generateBreakpoints();
+          var classes = scope.generateClasses();
 
           scope.removeBreakpointClasses();
-          element.addClass(breakpoints.join(' '));
+          element.addClass(classes.join(' '));
+          currentClasses = classes;
         };
 
         scope.debounceRenderBreakpointClasses = function () {
           scope.debounce(scope.renderBreakpointClasses, scope.config.maxRefreshRate);
         };
 
-        scope.generateBreakpoints = function () {
-          return (scope.config.legacy) ? scope.generateIntervalBreakpoints() : scope.generateCustomBreakpoints();
+        scope.generateClasses = function () {
+          return (scope.config.legacy) ? scope.generateIntervalClasses() : scope.generateCustomClasses();
         };
 
-        scope.generateIntervalBreakpoints = function () {
+        scope.generateIntervalClasses = function () {
           var start = scope.config.start,
               end = scope.config.end,
               interval = scope.config.interval,
@@ -128,7 +131,7 @@ angular.module('mm.responsiveElements').directive('respond', [
           return classes;
         };
 
-        scope.generateCustomBreakpoints = function () {
+        scope.generateCustomClasses = function () {
           var custom = scope.config.custom,
               i = 0,
               len = custom.length,
@@ -159,23 +162,7 @@ angular.module('mm.responsiveElements').directive('respond', [
         };
 
         scope.removeBreakpointClasses = function () {
-          var classesToCleanup = scope.parseBreakpointClasses();
-          element.removeClass(classesToCleanup.join(' '));
-        };
-
-        scope.parseBreakpointClasses = function () {
-          var breakpointsString = element.attr('class') || '',
-              classes = breakpointsString.split(/\s+/),
-              breakpointClasses = [],
-              re = new RegExp(scope.config.equalsPrefix + '\\d+');
-
-          for (var i = 0, len = classes.length; i < len; i++) {
-            if (classes[i].match(/^gt\d+|lt\d+$/) || classes[i].match(re)) {
-              breakpointClasses.push(classes[i]);
-            }
-          }
-
-          return breakpointClasses;
+          element.removeClass(currentClasses.join(' '));
         };
 
         /**
