@@ -39,6 +39,7 @@ angular.module('mm.responsiveElements').provider('RespondConfig', function () {
     equalsPrefix: 'gt',
     maxRefreshRate: 5,
     breaks: [],
+    mobileFirst: false,
     legacy: false
   };
   return {
@@ -76,8 +77,9 @@ angular.module('mm.responsiveElements').directive('respond', [
             if (attrs.hasOwnProperty(attribute)) {
               // If it is a respond attribute, but not `respond-config` since that's already been taken care of
               if (attribute.substring(0, 7) === 'respond' && attribute !== 'respondConfig') {
-                configPropertyName = attribute.substr(7).charAt(0).toLowerCase() + attribute.slice(1);
-                config[configPropertyName] = (attrs.attribute === 'false') ? false : attrs.attribute;
+                configPropertyName = attribute.substr(7);
+                configPropertyName = configPropertyName.charAt(0).toLowerCase() + configPropertyName.slice(1);
+                config[configPropertyName] = (attrs.attribute === 'false') ? false : attrs[attribute];
               }
             }
           }
@@ -161,13 +163,13 @@ angular.module('mm.responsiveElements').directive('respond', [
          * @returns {Array}
          */
         scope.generateCustomClasses = function () {
-          var custom = scope.config.custom,
+          var breaks = scope.config.breaks,
               i = 0,
-              len = custom.length,
+              len = breaks.length,
               classes = [];
 
           for (; i < len; i++) {
-            classes.push(scope.getClassName(custom[i]));
+            classes.push(scope.getClassName(breaks[i]));
           }
 
           return classes;
@@ -181,18 +183,24 @@ angular.module('mm.responsiveElements').directive('respond', [
          */
         scope.getClassName = function (value) {
           var elementWidth = scope.getElementWidth(),
+              mobileFirst = scope.config.mobileFirst,
               ltPrefix = scope.config.ltPrefix,
               gtPrefix = scope.config.gtPrefix,
-              equalsPrefix = scope.config.equalsPrefix;
+              equalsPrefix = scope.config.equalsPrefix,
+              customName = false;
 
-          if (parseInt(elementWidth) > parseInt(value)) {
-            return gtPrefix + value;
+          if (typeof value === 'string' && value.indexOf(':') !== -1) {
+            customName = value.split(':')[1];
           }
-          if (parseInt(elementWidth) < parseInt(value)) {
-            return ltPrefix + value;
+
+          if (!mobileFirst && parseInt(elementWidth) < parseInt(value)) {
+            return (customName) ? ltPrefix + customName : ltPrefix + value;
           }
           if (parseInt(value) === parseInt(elementWidth)) {
-            return equalsPrefix + value;
+            return (customName) ? equalsPrefix + customName : equalsPrefix + value;
+          }
+          if (parseInt(elementWidth) > parseInt(value)) {
+            return (customName) ? gtPrefix + customName : gtPrefix + value;
           }
         };
 
