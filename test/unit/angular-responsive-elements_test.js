@@ -10,11 +10,13 @@ describe('RespondConfig service', function () {
         start: 100,
         end: 900,
         interval: 50,
+        ltPrefix: 'lt',
+        gtPrefix: 'gt',
         equalsPrefix: 'gt',
         maxRefreshRate: 5,
-        custom: [],
-        doInterval: true,
-        doCustom: false
+        breaks: [],
+        mobileFirst: false,
+        legacy: false
       });
     });
   });
@@ -60,7 +62,7 @@ describe('respond directive', function () {
       expect(scope.config).toMatch(RespondConfig);
     });
 
-    it('should allow custom config per element', function () {
+    it('should allow custom config object per element', function () {
       element = angular.element('<div respond respond-config="{start:300}"></div>');
       $compile(element)($rootScope);
       scope = element.isolateScope();
@@ -71,15 +73,11 @@ describe('respond directive', function () {
 
   describe('init()', function () {
 
-    it('should call renderBreakpointClasses()', function () {
+    it('should call renderBreakpointClasses() and addListeners()', function () {
       var renderBreakpointClasses = spyOn(scope, 'renderBreakpointClasses');
-      scope.init();
-      expect(renderBreakpointClasses).toHaveBeenCalled();
-    });
-
-    it('should call addListeners()', function () {
       var addListeners = spyOn(scope, 'addListeners');
       scope.init();
+      expect(renderBreakpointClasses).toHaveBeenCalled();
       expect(addListeners).toHaveBeenCalled();
     });
 
@@ -115,10 +113,10 @@ describe('respond directive', function () {
 
   describe('renderBreakpointClasses()', function () {
 
-    it('should call generateBreakpoints()', function () {
-      var generateBreakpoints = spyOn(scope, 'generateBreakpoints').and.returnValue([]);
+    it('should call generateClasses()', function () {
+      var generateClasses = spyOn(scope, 'generateClasses').and.returnValue([]);
       scope.renderBreakpointClasses();
-      expect(generateBreakpoints).toHaveBeenCalled();
+      expect(generateClasses).toHaveBeenCalled();
     });
 
     it('should call removeBreakpointClasses()', function () {
@@ -128,11 +126,18 @@ describe('respond directive', function () {
     });
 
     it('should call add classes to element', function () {
-      var generateBreakpoints = spyOn(scope, 'generateBreakpoints').and.returnValue(['foo', 'bar']);
+      var generateClasses = spyOn(scope, 'generateClasses').and.returnValue(['foo', 'bar']);
       var removeBreakpointClasses = spyOn(scope, 'removeBreakpointClasses');
       var elementClasses = element.attr('class');
       scope.renderBreakpointClasses();
       expect(element.attr('class')).toBe(elementClasses + ' foo bar');
+    });
+
+    it('should set the current class property after adding classes to element', function () {
+      var generateClasses = spyOn(scope, 'generateClasses').and.returnValue(['foo', 'bar']);
+      var setCurrentClasses = spyOn(scope, 'setCurrentClasses');
+      scope.renderBreakpointClasses();
+      expect(setCurrentClasses).toHaveBeenCalledWith(['foo', 'bar']);
     });
 
   });
@@ -148,71 +153,62 @@ describe('respond directive', function () {
     it('should pass the correct parameters to debounce ', function () {
       var debounce = spyOn(scope, 'debounce');
       scope.debounceRenderBreakpointClasses();
-      expect(debounce.calls.mostRecent().args).toEqual([scope.renderBreakpointClasses, scope.config.maxRefreshRate]);
+      expect(debounce.calls.mostRecent().args).toEqual([scope.renderBreakpointClasses, scope.config.maxRefreshRate, true]);
     });
 
   });
 
-  describe('generateBreakpoints()', function () {
+  describe('generateClasses()', function () {
 
     it('should return an array', function () {
-      expect(scope.generateBreakpoints() instanceof Array).toBeTruthy();
+      expect(scope.generateClasses() instanceof Array).toBeTruthy();
     });
 
-    it('should call generateIntervalBreakpoints() when configured to do so', function () {
-      var generateIntervalBreakpoints = spyOn(scope, 'generateIntervalBreakpoints').and.returnValue([]);
-      scope.config.doInterval = false;
-      scope.generateBreakpoints();
-      expect(generateIntervalBreakpoints).not.toHaveBeenCalled();
-      scope.config.doInterval = true;
-      scope.generateBreakpoints();
-      expect(generateIntervalBreakpoints).toHaveBeenCalled();
+    it('should call generateIntervalClasses() when configured to do so', function () {
+      var generateIntervalClasses = spyOn(scope, 'generateIntervalClasses').and.returnValue([]);
+      scope.config.legacy = false;
+      scope.generateClasses();
+      expect(generateIntervalClasses).not.toHaveBeenCalled();
+      scope.config.legacy = true;
+      scope.generateClasses();
+      expect(generateIntervalClasses).toHaveBeenCalled();
     });
 
-    it('should call generateCustomBreakpoints() when configured to do so', function () {
-      var generateCustomBreakpoints = spyOn(scope, 'generateCustomBreakpoints').and.returnValue([]);
-      scope.config.doCustom = false;
-      scope.generateBreakpoints();
-      expect(generateCustomBreakpoints).not.toHaveBeenCalled();
-      scope.config.doCustom = true;
-      scope.generateBreakpoints();
-      expect(generateCustomBreakpoints).toHaveBeenCalled();
-    });
-
-    it('should return concat value of generateIntervalBreakpoints() and generateCustomBreakpoints()', function () {
-      var generateIntervalBreakpoints = spyOn(scope, 'generateIntervalBreakpoints').and.returnValue(['foo']);
-      var generateCustomBreakpoints = spyOn(scope, 'generateCustomBreakpoints').and.returnValue(['bar']);
-      scope.config.doInterval = true;
-      scope.config.doCustom = true;
-      var response = scope.generateBreakpoints();
-      expect(response).toEqual(['foo', 'bar']);
+    it('should call generateCustomClasses() when configured to do so', function () {
+      var generateCustomClasses = spyOn(scope, 'generateCustomClasses').and.returnValue([]);
+      scope.config.legacy = true;
+      scope.generateClasses();
+      expect(generateCustomClasses).not.toHaveBeenCalled();
+      scope.config.legacy = false;
+      scope.generateClasses();
+      expect(generateCustomClasses).toHaveBeenCalled();
     });
 
   });
 
-  describe('generateIntervalBreakpoints()', function () {
+  describe('generateIntervalClasses()', function () {
 
     beforeEach(function () {
-      scope.config.doInterval = true;
+      scope.config.legacy = true;
       scope.config.start = 100;
       scope.config.end = 300;
       scope.config.interval = 100;
     });
 
     it('should return an array', function () {
-      expect(scope.generateIntervalBreakpoints() instanceof Array).toBeTruthy();
+      expect(scope.generateIntervalClasses() instanceof Array).toBeTruthy();
     });
 
     it('should call getClassName() the correct number of times', function () {
       var getClassName = spyOn(scope, 'getClassName');
       var numOfItems = Math.floor((scope.config.end - scope.config.start) / scope.config.interval) + 1;
-      scope.generateIntervalBreakpoints();
+      scope.generateIntervalClasses();
       expect(getClassName.calls.count()).toEqual(numOfItems);
     });
 
     it('should pass the correct value to getClassName()', function () {
       var getClassName = spyOn(scope, 'getClassName');
-      scope.generateIntervalBreakpoints();
+      scope.generateIntervalClasses();
       expect(getClassName.calls.first().args[0]).toEqual(100);
       expect(getClassName.calls.all()[1].args[0]).toEqual(200);
       expect(getClassName.calls.mostRecent().args[0]).toEqual(300);
@@ -220,32 +216,31 @@ describe('respond directive', function () {
 
     it('should return an array of the values returned from getClassName()', function () {
       var getClassName = spyOn(scope, 'getClassName').and.returnValue('foo');
-      expect(scope.generateIntervalBreakpoints()).toEqual(['foo', 'foo', 'foo']);
+      expect(scope.generateIntervalClasses()).toEqual(['foo', 'foo', 'foo']);
     });
 
   });
 
-  describe('generateCustomBreakpoints()', function () {
+  describe('generateCustomClasses()', function () {
 
     beforeEach(function () {
-      scope.config.doInterval = false;
-      scope.config.doCustom = false;
-      scope.config.custom = [320, 768, 1280];
+      scope.config.legacy = false;
+      scope.config.breaks = [320, 768, 1280];
     });
 
     it('should return an array', function () {
-      expect(scope.generateCustomBreakpoints() instanceof Array).toBeTruthy();
+      expect(scope.generateCustomClasses() instanceof Array).toBeTruthy();
     });
 
     it('should call getClassName() the correct number of times', function () {
       var getClassName = spyOn(scope, 'getClassName');
-      scope.generateCustomBreakpoints();
-      expect(getClassName.calls.count()).toEqual(scope.config.custom.length);
+      scope.generateCustomClasses();
+      expect(getClassName.calls.count()).toEqual(scope.config.breaks.length);
     });
 
     it('should pass the correct value to getClassName()', function () {
       var getClassName = spyOn(scope, 'getClassName');
-      scope.generateCustomBreakpoints();
+      scope.generateCustomClasses();
       expect(getClassName.calls.first().args[0]).toEqual(320);
       expect(getClassName.calls.all()[1].args[0]).toEqual(768);
       expect(getClassName.calls.mostRecent().args[0]).toEqual(1280);
@@ -253,7 +248,7 @@ describe('respond directive', function () {
 
     it('should return an array of the values returned from getClassName()', function () {
       var getClassName = spyOn(scope, 'getClassName').and.returnValue('foo');
-      expect(scope.generateCustomBreakpoints()).toEqual(['foo', 'foo', 'foo']);
+      expect(scope.generateCustomClasses()).toEqual(['foo', 'foo', 'foo']);
     });
 
   });
@@ -285,16 +280,16 @@ describe('respond directive', function () {
 
   describe('removeBreakpointClasses()', function () {
 
-    var parseBreakpointClasses;
+    var getCurrentClasses;
 
     beforeEach(function () {
-      parseBreakpointClasses = spyOn(scope, 'parseBreakpointClasses').and.returnValue(['foo', 'bar']);
+      getCurrentClasses = spyOn(scope, 'getCurrentClasses').and.returnValue(['foo', 'bar']);
     });
 
     it('should call parseBreakpointClasses()', function () {
-      expect(parseBreakpointClasses).not.toHaveBeenCalled();
+      expect(getCurrentClasses).not.toHaveBeenCalled();
       scope.removeBreakpointClasses();
-      expect(parseBreakpointClasses).toHaveBeenCalled();
+      expect(getCurrentClasses).toHaveBeenCalled();
     });
 
     it('should remove classes on element returned from parseBreakpointClasses()', function () {
@@ -302,28 +297,6 @@ describe('respond directive', function () {
       expect(element.hasClass('foo bar')).toBeTruthy();
       scope.removeBreakpointClasses();
       expect(element.hasClass('foo bar')).toBeFalsy();
-    });
-
-  });
-
-  describe('parseBreakpointClasses()', function () {
-
-    beforeEach(function () {
-      scope.config.equalsPrefix = 'foo';
-    });
-
-    it('should return an array', function () {
-      expect(scope.parseBreakpointClasses() instanceof Array).toBeTruthy();
-    });
-
-    it('should return all `lt`, `gt` and `config.equalsPrefix` prefixed classes on element', function () {
-      element.attr('class', 'lt100 lt200 gt100 gt200 foo100 foo200 bar100 bar200');
-      expect(scope.parseBreakpointClasses()).toEqual(['lt100', 'lt200', 'gt100', 'gt200', 'foo100', 'foo200']);
-    });
-
-    it('should only return classes if prefix is followed by a number', function () {
-      element.attr('class', 'lt ltfoo lt100 gt gtbar gt100 foo foobaz foo100');
-      expect(scope.parseBreakpointClasses()).toEqual(['lt100', 'gt100', 'foo100']);
     });
 
   });
