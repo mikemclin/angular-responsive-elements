@@ -39,7 +39,7 @@ angular.module('mm.responsiveElements').provider('RespondConfig', function () {
     equalsPrefix: 'gt',
     maxRefreshRate: 5,
     breaks: [],
-    mobileFirst: false,
+    mobile: 'both',
     legacy: false
   };
   return {
@@ -193,7 +193,7 @@ angular.module('mm.responsiveElements').directive('respond', [
          */
         scope.getClassName = function (value) {
           var elementWidth = scope.getElementWidth(),
-              mobileFirst = scope.config.mobileFirst,
+              mobile = scope.config.mobile,
               ltPrefix = scope.config.ltPrefix,
               gtPrefix = scope.config.gtPrefix,
               equalsPrefix = scope.config.equalsPrefix,
@@ -203,13 +203,22 @@ angular.module('mm.responsiveElements').directive('respond', [
             customName = value.split(':')[1];
           }
 
-          if (!mobileFirst && parseInt(elementWidth) < parseInt(value)) {
+          if (
+              (mobile === 'last' || mobile === 'both') &&
+              parseInt(elementWidth) < parseInt(value)
+          ) {
             return (customName) ? ltPrefix + customName : ltPrefix + value;
           }
-          if (parseInt(value) === parseInt(elementWidth)) {
+          if (
+              (mobile === 'first' || mobile === 'both') &&
+              parseInt(value) === parseInt(elementWidth)
+          ) {
             return (customName) ? equalsPrefix + customName : equalsPrefix + value;
           }
-          if (parseInt(elementWidth) > parseInt(value)) {
+          if (
+              (mobile === 'first' || mobile === 'both') &&
+              parseInt(elementWidth) > parseInt(value)
+          ) {
             return (customName) ? gtPrefix + customName : gtPrefix + value;
           }
         };

@@ -15,7 +15,7 @@ describe('RespondConfig service', function () {
         equalsPrefix: 'gt',
         maxRefreshRate: 5,
         breaks: [],
-        mobileFirst: false,
+        mobile: 'both',
         legacy: false
       });
     });
