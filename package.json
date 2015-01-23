@@ -1,6 +1,6 @@
 {
   "name": "angular-responsive-elements",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Dynamically add and remove classes on an HTML element based on the width of it's parent element",
   "main": "angular-responsive-elements.js",
   "directories": {
