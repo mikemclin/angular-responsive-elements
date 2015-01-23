@@ -74,7 +74,7 @@ module.exports = function(grunt) {
 
     coveralls: {
       options: {
-        'coverage_dir': './coverage'
+        coverageDir: './coverage'
       }
     },
 
