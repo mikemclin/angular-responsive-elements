@@ -7,16 +7,13 @@ describe('RespondConfig service', function () {
   it('should set default config', function () {
     inject(function (RespondConfig) {
       expect(RespondConfig).toEqual({
+        maxRefreshRate: 5,
         start: 100,
         end: 900,
         interval: 50,
         ltPrefix: 'lt',
         gtPrefix: 'gt',
-        equalsPrefix: 'gt',
-        maxRefreshRate: 5,
-        breaks: [],
-        mobile: 'both',
-        legacy: false
+        equalsPrefix: 'gt'
       });
     });
   });
@@ -160,34 +157,6 @@ describe('respond directive', function () {
 
   describe('generateClasses()', function () {
 
-    it('should return an array', function () {
-      expect(scope.generateClasses() instanceof Array).toBeTruthy();
-    });
-
-    it('should call generateIntervalClasses() when configured to do so', function () {
-      var generateIntervalClasses = spyOn(scope, 'generateIntervalClasses').and.returnValue([]);
-      scope.config.legacy = false;
-      scope.generateClasses();
-      expect(generateIntervalClasses).not.toHaveBeenCalled();
-      scope.config.legacy = true;
-      scope.generateClasses();
-      expect(generateIntervalClasses).toHaveBeenCalled();
-    });
-
-    it('should call generateCustomClasses() when configured to do so', function () {
-      var generateCustomClasses = spyOn(scope, 'generateCustomClasses').and.returnValue([]);
-      scope.config.legacy = true;
-      scope.generateClasses();
-      expect(generateCustomClasses).not.toHaveBeenCalled();
-      scope.config.legacy = false;
-      scope.generateClasses();
-      expect(generateCustomClasses).toHaveBeenCalled();
-    });
-
-  });
-
-  describe('generateIntervalClasses()', function () {
-
     beforeEach(function () {
       scope.config.legacy = true;
       scope.config.start = 100;
@@ -196,19 +165,19 @@ describe('respond directive', function () {
     });
 
     it('should return an array', function () {
-      expect(scope.generateIntervalClasses() instanceof Array).toBeTruthy();
+      expect(scope.generateClasses() instanceof Array).toBeTruthy();
     });
 
     it('should call getClassName() the correct number of times', function () {
       var getClassName = spyOn(scope, 'getClassName');
       var numOfItems = Math.floor((scope.config.end - scope.config.start) / scope.config.interval) + 1;
-      scope.generateIntervalClasses();
+      scope.generateClasses();
       expect(getClassName.calls.count()).toEqual(numOfItems);
     });
 
     it('should pass the correct value to getClassName()', function () {
       var getClassName = spyOn(scope, 'getClassName');
-      scope.generateIntervalClasses();
+      scope.generateClasses();
       expect(getClassName.calls.first().args[0]).toEqual(100);
       expect(getClassName.calls.all()[1].args[0]).toEqual(200);
       expect(getClassName.calls.mostRecent().args[0]).toEqual(300);
@@ -216,39 +185,7 @@ describe('respond directive', function () {
 
     it('should return an array of the values returned from getClassName()', function () {
       var getClassName = spyOn(scope, 'getClassName').and.returnValue('foo');
-      expect(scope.generateIntervalClasses()).toEqual(['foo', 'foo', 'foo']);
-    });
-
-  });
-
-  describe('generateCustomClasses()', function () {
-
-    beforeEach(function () {
-      scope.config.legacy = false;
-      scope.config.breaks = [320, 768, 1280];
-    });
-
-    it('should return an array', function () {
-      expect(scope.generateCustomClasses() instanceof Array).toBeTruthy();
-    });
-
-    it('should call getClassName() the correct number of times', function () {
-      var getClassName = spyOn(scope, 'getClassName');
-      scope.generateCustomClasses();
-      expect(getClassName.calls.count()).toEqual(scope.config.breaks.length);
-    });
-
-    it('should pass the correct value to getClassName()', function () {
-      var getClassName = spyOn(scope, 'getClassName');
-      scope.generateCustomClasses();
-      expect(getClassName.calls.first().args[0]).toEqual(320);
-      expect(getClassName.calls.all()[1].args[0]).toEqual(768);
-      expect(getClassName.calls.mostRecent().args[0]).toEqual(1280);
-    });
-
-    it('should return an array of the values returned from getClassName()', function () {
-      var getClassName = spyOn(scope, 'getClassName').and.returnValue('foo');
-      expect(scope.generateCustomClasses()).toEqual(['foo', 'foo', 'foo']);
+      expect(scope.generateClasses()).toEqual(['foo', 'foo', 'foo']);
     });
 
   });

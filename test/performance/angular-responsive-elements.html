@@ -17,43 +17,43 @@
         background-color: white;
     }
 
-    .item.lt320 {
+    .item.lt100 {
         border-color: blue;
     }
 
-    .item.gt320 {
+    .item.gt100 {
         background-color: green;
     }
 
-    .item.lt480 {
+    .item.lt400 {
         border-color: yellow;
     }
 
-    .item.gt480 {
+    .item.gt400 {
         background-color: black;
     }
 
-    .item.lt768 {
+    .item.lt550 {
         border-color: salmon;
     }
 
-    .item.gt768 {
+    .item.gt550 {
         background-color: saddlebrown;
     }
 
-    .item.lt980 {
+    .item.lt700 {
         border-color: purple;
     }
 
-    .item.gt980 {
+    .item.gt700 {
         background-color: hotpink;
     }
 
-    .item.lt1200 {
+    .item.lt900 {
         border-color: orange;
     }
 
-    .item.gt1200 {
+    .item.gt900 {
         background-color: silver;
     }
 
@@ -78,20 +78,12 @@
 
 <div class="item" ng-repeat="item in items" respond></div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
 <script src="../../angular-responsive-elements.js"></script>
 
 <script>
 
     angular.module('myApp', ['mm.responsiveElements'])
-
-            .config(function (RespondConfigProvider) {
-                RespondConfigProvider.config({
-                    doInterval: false,
-                    doCustom: true,
-                    custom: [320, 480, 768, 960, 1200]
-                });
-            })
 
             .controller('AppCtrl', function ($scope) {
 

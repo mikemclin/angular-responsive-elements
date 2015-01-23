@@ -4,7 +4,6 @@
  *
  * Based on:
  * Responsive Elements <https://github.com/kumailht/responsive-elements>
- * Copyright (c) 2013 Kumail Hunaid
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,16 +30,13 @@ angular.module('mm.responsiveElements', []);
 
 angular.module('mm.responsiveElements').provider('RespondConfig', function () {
   var config = {
+    maxRefreshRate: 5,
     start: 100,
     end: 900,
     interval: 50,
     ltPrefix: 'lt',
     gtPrefix: 'gt',
-    equalsPrefix: 'gt',
-    maxRefreshRate: 5,
-    breaks: [],
-    mobile: 'both',
-    legacy: false
+    equalsPrefix: 'gt'
   };
   return {
     config: function (userConfig) {
@@ -79,17 +75,7 @@ angular.module('mm.responsiveElements').directive('respond', [
               if (attribute.substring(0, 7) === 'respond' && attribute !== 'respondConfig') {
                 configPropertyName = attribute.substr(7);
                 configPropertyName = configPropertyName.charAt(0).toLowerCase() + configPropertyName.slice(1);
-                // If we are configuring the breaks setting, we will need to parse the string into an array
-                if (configPropertyName === 'breaks') {
-                  var breaksArray = attrs[attribute].split(',');
-                  var breaks = [];
-                  for (var i = 0, len = breaksArray.length; i < len; i++) {
-                    breaks.push(breaksArray[i].trim());
-                  }
-                  config.breaks = breaks;
-                } else {
-                  config[configPropertyName] = (attrs.attribute === 'false') ? false : attrs[attribute];
-                }
+                config[configPropertyName] = (attrs.attribute === 'false') ? false : attrs[attribute];
               }
             }
           }
@@ -144,15 +130,6 @@ angular.module('mm.responsiveElements').directive('respond', [
          * @returns {Array}
          */
         scope.generateClasses = function () {
-          return (scope.config.legacy) ? scope.generateIntervalClasses() : scope.generateCustomClasses();
-        };
-
-        /**
-         * Returns class names using legacy breakpoint settings
-         *
-         * @returns {Array}
-         */
-        scope.generateIntervalClasses = function () {
           var start = scope.config.start,
               end = scope.config.end,
               interval = scope.config.interval,
@@ -168,24 +145,6 @@ angular.module('mm.responsiveElements').directive('respond', [
         };
 
         /**
-         * Returns class names based on custom breakpoint settings
-         *
-         * @returns {Array}
-         */
-        scope.generateCustomClasses = function () {
-          var breaks = scope.config.breaks,
-              i = 0,
-              len = breaks.length,
-              classes = [];
-
-          for (; i < len; i++) {
-            classes.push(scope.getClassName(breaks[i]));
-          }
-
-          return classes;
-        };
-
-        /**
          * Generates the class name based on config and element width
          *
          * @param value
@@ -193,33 +152,18 @@ angular.module('mm.responsiveElements').directive('respond', [
          */
         scope.getClassName = function (value) {
           var elementWidth = scope.getElementWidth(),
-              mobile = scope.config.mobile,
               ltPrefix = scope.config.ltPrefix,
               gtPrefix = scope.config.gtPrefix,
-              equalsPrefix = scope.config.equalsPrefix,
-              customName = false;
+              equalsPrefix = scope.config.equalsPrefix;
 
-          if (typeof value === 'string' && value.indexOf(':') !== -1) {
-            customName = value.split(':')[1];
+          if (parseInt(elementWidth) < parseInt(value)) {
+            return ltPrefix + value;
           }
-
-          if (
-              (mobile === 'last' || mobile === 'both') &&
-              parseInt(elementWidth) < parseInt(value)
-          ) {
-            return (customName) ? ltPrefix + customName : ltPrefix + value;
+          if (parseInt(value) === parseInt(elementWidth)) {
+            return equalsPrefix + value;
           }
-          if (
-              (mobile === 'first' || mobile === 'both') &&
-              parseInt(value) === parseInt(elementWidth)
-          ) {
-            return (customName) ? equalsPrefix + customName : equalsPrefix + value;
-          }
-          if (
-              (mobile === 'first' || mobile === 'both') &&
-              parseInt(elementWidth) > parseInt(value)
-          ) {
-            return (customName) ? gtPrefix + customName : gtPrefix + value;
+          if (parseInt(elementWidth) > parseInt(value)) {
+            return gtPrefix + value;
           }
         };
 
